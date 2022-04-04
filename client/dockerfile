@@ -1,0 +1,10 @@
+FROM python
+
+RUN mkdir /service
+COPY ./ /service/
+WORKDIR /service
+RUN python -m pip install --upgrade pip
+RUN python -m pip install -r ./requirements.txt
+RUN python -m grpc_tools.protoc --proto_path=. unary.proto --python_out=./ --grpc_python_out=./ 
+EXPOSE 50052
+ENTRYPOINT [ "python", "unary_client.py" ]

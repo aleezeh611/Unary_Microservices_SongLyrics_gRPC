@@ -1,8 +1,7 @@
 import grpc
 import unary_pb2_grpc as pb2_grpc
 import unary_pb2 as pb2
-
-
+import os
 class UnaryClient(object):
     """
     Client for gRPC functionality
@@ -11,12 +10,12 @@ class UnaryClient(object):
     def __init__(self):
         self.host = 'localhost'
         self.server_port = 50051
-
+        server_host = os.getenv("SERVER_HOST", "localhost")
+ 
         # instantiate a channel
-        self.channel = grpc.insecure_channel(
-            '{}:{}'.format(self.host, self.server_port))
-
-        # bind the client and the server
+        self.channel = grpc.insecure_channel( f"{server_host}:50051" )
+        # bind t
+        # he client and the server
         self.stub = pb2_grpc.UnaryStub(self.channel)
 
     def get_lyrics(self, message):
@@ -30,7 +29,7 @@ class UnaryClient(object):
 
 if __name__ == '__main__':
     client = UnaryClient()
-    songname = "songlyrics\\"
+    songname = "songlyrics/"
     songname += input("Enter song name (with _ instead of space pls) :")
     songname += ".txt"
     result = client.get_lyrics(message=songname)
